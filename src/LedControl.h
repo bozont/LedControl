@@ -28,6 +28,7 @@
 #define LedControl_h
 
 #include <avr/pgmspace.h>
+#include <SPI.h>
 
 #if (ARDUINO >= 100)
 #include <Arduino.h>
@@ -86,6 +87,7 @@ class LedControl {
          * numDevices	maximum number of devices that can be controled
          */
         LedControl(int dataPin, int clkPin, int csPin, int numDevices=1);
+        LedControl();
 
         /*
          * Gets the number of devices attached to this LedControl.

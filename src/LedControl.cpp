@@ -50,8 +50,8 @@ LedControl::LedControl(int dataPin, int clkPin, int csPin, int numDevices) {
     if(numDevices<=0 || numDevices>8 )
         numDevices=8;
     maxDevices=numDevices;
-    pinMode(SPI_MOSI,OUTPUT);
-    pinMode(SPI_CLK,OUTPUT);
+    //pinMode(SPI_MOSI,OUTPUT);
+    //pinMode(SPI_CLK,OUTPUT);
     pinMode(SPI_CS,OUTPUT);
     digitalWrite(SPI_CS,HIGH);
     SPI_MOSI=dataPin;
@@ -67,6 +67,10 @@ LedControl::LedControl(int dataPin, int clkPin, int csPin, int numDevices) {
         //we go into shutdown-mode on startup
         shutdown(i,true);
     }
+}
+
+LedControl::LedControl() {
+
 }
 
 int LedControl::getDeviceCount() {
@@ -201,9 +205,11 @@ void LedControl::spiTransfer(int addr, volatile byte opcode, volatile byte data)
     spidata[offset]=data;
     //enable the line 
     digitalWrite(SPI_CS,LOW);
+
     //Now shift out the data 
     for(int i=maxbytes;i>0;i--)
-        shiftOut(SPI_MOSI,SPI_CLK,MSBFIRST,spidata[i-1]);
+        SPI.transfer(spidata[i-1]);
+
     //latch the data onto the display
     digitalWrite(SPI_CS,HIGH);
 }    
